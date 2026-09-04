@@ -36,42 +36,5 @@ export interface Familia {
   integrantes: IntegranteFamilia[];
 }
 
-export const FAMILIAS_SEED: Familia[] = [
-  {
-    id: "fam-01", nombre: "Familia Recinos Ovalle", tipoResidencia: "Propia", padre: "Carlos Humberto Godoy Marroquín", madre: "María Fernanda Recinos Ovalle",
-    tipoUnion: "Matrimonio canónico", fechaUnion: "2015-10-20", domicilio: "3a. calle 4-21 zona 1", localidad: "Chiquimulilla", telefono: "7845-1122",
-    perteneceRadioParroquial: true,
-    integrantes: [
-      { personaId: "per-01", nombre: "María Fernanda Recinos Ovalle", tipo: "Madre" },
-      { personaId: "per-02", nombre: "Carlos Humberto Godoy Marroquín", tipo: "Padre" },
-      { personaId: "per-10", nombre: "Diego Alejandro Súchite Ramírez", tipo: "Hijo(a)" },
-    ],
-  },
-  {
-    id: "fam-02", nombre: "Familia Xicará Pérez", tipoResidencia: "Familiar", madre: "Ana Lucía Xicará Pérez",
-    tipoUnion: "Unión de hecho", domicilio: "Caserío El Ahumado", localidad: "Chiquimulilla", telefono: "3312-7788",
-    perteneceRadioParroquial: true,
-    integrantes: [
-      { personaId: "per-03", nombre: "Ana Lucía Xicará Pérez", tipo: "Madre" },
-      { personaId: "per-11", nombre: "Gabriela Alejandra Xión Morales", tipo: "Hijo(a)" },
-    ],
-  },
-  {
-    id: "fam-03", nombre: "Familia Solís Chacón", tipoResidencia: "Propia", madre: "Marta Lidia Solís Chacón",
-    tipoUnion: "No especifica", domicilio: "5a. calle 2-15 zona 1", localidad: "Chiquimulilla", telefono: "7845-2211",
-    perteneceRadioParroquial: true,
-    integrantes: [{ personaId: "per-05", nombre: "Marta Lidia Solís Chacón", tipo: "Madre" }],
-  },
-  {
-    id: "fam-04", nombre: "Familia Alvarado Sánchez", tipoResidencia: "Alquilada", padre: "Rigoberto Alvarado Sánchez",
-    tipoUnion: "Matrimonio canónico", fechaUnion: "1978-05-14", domicilio: "Barrio San José", localidad: "Chiquimulilla", telefono: "7845-0098",
-    perteneceRadioParroquial: false,
-    integrantes: [{ personaId: "per-04", nombre: "Rigoberto Alvarado Sánchez", tipo: "Padre" }],
-  },
-  {
-    id: "fam-05", nombre: "Familia Chacón Girón", tipoResidencia: "Propia", madre: "Rosa Emilia Chacón Girón",
-    tipoUnion: "Matrimonio canónico", fechaUnion: "1992-02-08", domicilio: "2a. avenida 8-40 zona 3", localidad: "Chiquimulilla", telefono: "7845-4471",
-    perteneceRadioParroquial: true,
-    integrantes: [{ personaId: "per-07", nombre: "Rosa Emilia Chacón Girón", tipo: "Madre" }],
-  },
-];
+/** Sin familias precargadas: el mockup arranca vacío. Se registran localmente con "Nuevo" para demostrar el flujo. */
+export const FAMILIAS_SEED: Familia[] = [];

@@ -3,8 +3,9 @@ import { MOVIMIENTOS_SEED, SUBCUENTAS_SEED } from "../../data/economico";
 
 /** Sección "Balance / Saldos" — corresponde al reporte ecBalance documentado en tipo-de-reportes-sp.md (Balance contable anual: Debe/Haber/Saldo por cuenta), simplificado aquí a un resumen por subcuenta del año seleccionado. */
 export function BalanceSeccion() {
-  const anios = Array.from(new Set(MOVIMIENTOS_SEED.map((m) => m.periodoAnio))).sort();
-  const [anio, setAnio] = useState(anios[anios.length - 1] ?? 2026);
+  const aniosConMovimientos = Array.from(new Set(MOVIMIENTOS_SEED.map((m) => m.periodoAnio))).sort();
+  const anios = aniosConMovimientos.length > 0 ? aniosConMovimientos : [2026];
+  const [anio, setAnio] = useState(anios[anios.length - 1]);
 
   const filas = useMemo(() => {
     const acumulado = new Map<string, { debe: number; haber: number }>();

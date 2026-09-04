@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Briefcase,
   Calendar,
@@ -19,10 +18,10 @@ import {
 } from "lucide-react";
 import { CITAS_SEED, type Cita, type VistaAgenda, PRIORIDADES } from "../data/agenda";
 import { COLOR_PRIORIDAD } from "../data/agenda";
-import { FECHA_SIMULADA } from "../context/AppShellContext";
+import { FECHA_SIMULADA, useAppShell } from "../context/AppShellContext";
 import { capitalizar, formatFecha, nombreMesAnio, parseISO, toISO } from "../utils/format";
 import { esMismoDia, esMismoMes, sumarDias } from "../utils/calendario";
-import { Sidebar } from "../components/layout/Sidebar";
+import { Sidebar, type SidebarNavProps } from "../components/layout/Sidebar";
 import { StatusBar } from "../components/layout/StatusBar";
 import { Ribbon, type RibbonPestanaConfig } from "../components/layout/Ribbon";
 import { MiniCalendar } from "../components/ui/MiniCalendar";
@@ -45,13 +44,20 @@ function tituloRango(vista: VistaAgenda, f: Date): string {
 
 type Dialogo = "cita" | "confirmarEliminar" | "confirmarCerrarSesion" | "vistaPrevia" | "configPagina" | null;
 
+interface Props extends SidebarNavProps {
+  onCerrarSesion: () => void;
+}
+
 /**
  * Módulo Agenda — reproduce pages/Agenda.tsx del desarrollo real (ribbon
  * genérico con pestañas Inicio/Impresión, sidebar con panel de calendarios
- * visibles, vistas Día/Laboral/Semana/Mes, impresión SÍ implementada).
+ * visibles, vistas Día/Laboral/Semana/Mes, impresión SÍ implementada). La
+ * navegación entre módulos llega por props (`onAbrirX`), igual que en el
+ * sistema real: App.tsx decide qué módulo mostrar con un estado en
+ * memoria, no con rutas de navegador.
  */
-export function Agenda() {
-  const navigate = useNavigate();
+export function Agenda({ onCerrarSesion, ...nav }: Props) {
+  const { usuario, esAdmin } = useAppShell();
   const [citas, setCitas] = useState<Cita[]>(CITAS_SEED);
   const [vista, setVista] = useState<VistaAgenda>("semana");
   const [fechaActual, setFechaActual] = useState(() => parseISO(FECHA_SIMULADA));
@@ -118,7 +124,9 @@ export function Agenda() {
 
       <div className="app-body">
         <Sidebar
+          {...nav}
           moduloActivo="agenda"
+          esAdminOSacerdote={esAdmin}
           onCerrarSesion={() => setDialogo("confirmarCerrarSesion")}
           panelSuperior={
             <>
@@ -170,14 +178,14 @@ export function Agenda() {
         </main>
       </div>
 
-      <StatusBar contadorTexto={`${citas.length} citas en la agenda`} mensajeEstado={mensajeEstado} usuario="Secretaría parroquial" />
+      <StatusBar contadorTexto={`${citas.length} citas en la agenda`} mensajeEstado={mensajeEstado} usuario={usuario} />
 
       {dialogo === "cita" && <CitaFormDialog cita={citaEnEdicion} fechaSugerida={toISO(fechaActual)} onGuardar={guardarCita} onCancelar={() => setDialogo(null)} nextId={nextId} />}
       {dialogo === "confirmarEliminar" && (
         <ConfirmDialog titulo="Eliminar cita" mensaje="Esta acción no se puede deshacer. ¿Deseas eliminar la cita seleccionada?" textoConfirmar="Eliminar" tono="alerta" onConfirmar={eliminarCita} onCancelar={() => setDialogo(null)} />
       )}
       {dialogo === "confirmarCerrarSesion" && (
-        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={() => navigate("/agenda")} onCancelar={() => setDialogo(null)} />
+        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={onCerrarSesion} onCancelar={() => setDialogo(null)} />
       )}
       {dialogo === "vistaPrevia" && (
         <PrintPreviewDialog

@@ -1,17 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter } from "react-router-dom";
 import App from "./App";
 import { AppShellProvider } from "./context/AppShellContext";
 import "./styles/theme.css";
 import "./styles/app.css";
 
+// Sin React Router: reproduce la arquitectura real (App.tsx del sistema
+// principal cambia de módulo con estado en memoria, no con el navegador).
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <HashRouter>
-      <AppShellProvider>
-        <App />
-      </AppShellProvider>
-    </HashRouter>
+    <AppShellProvider>
+      <App />
+    </AppShellProvider>
   </React.StrictMode>
 );

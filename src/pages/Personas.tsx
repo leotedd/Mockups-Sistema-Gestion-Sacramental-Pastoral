@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppShell } from "../context/AppShellContext";
 import { Eye, FilePlus2, FolderOpen, Pencil, Printer, RefreshCw, Search, Settings2, UserRoundX, Users } from "lucide-react";
 import { PERSONAS_SEED, SEXOS, TIPOS_DOCUMENTO, type Persona, type Sexo, type TipoDocumento } from "../data/personas";
-import { Sidebar } from "../components/layout/Sidebar";
+import { Sidebar, type SidebarNavProps } from "../components/layout/Sidebar";
 import { StatusBar } from "../components/layout/StatusBar";
 import { Ribbon, type RibbonPestanaConfig } from "../components/layout/Ribbon";
 import { Chip } from "../components/ui/Chip";
@@ -16,9 +16,13 @@ import { formatFecha } from "../utils/format";
 type Dialogo = "formulario" | "confirmarDesactivar" | "confirmarCerrarSesion" | "vistaPrevia" | "configPagina" | null;
 const POR_PAGINA = 10;
 
+interface Props extends SidebarNavProps {
+  onCerrarSesion: () => void;
+}
+
 /** Módulo Personas — reproduce pages/Personas.tsx del desarrollo real. */
-export function Personas() {
-  const navigate = useNavigate();
+export function Personas({ onCerrarSesion, ...nav }: Props) {
+  const { usuario, esAdmin } = useAppShell();
   const [personas, setPersonas] = useState<Persona[]>(PERSONAS_SEED);
   const [seleccionada, setSeleccionada] = useState<string | null>(null);
   const [mensajeEstado, setMensajeEstado] = useState<string | null>(null);
@@ -93,7 +97,9 @@ export function Personas() {
 
       <div className="app-body">
         <Sidebar
+          {...nav}
           moduloActivo="personas"
+          esAdminOSacerdote={esAdmin}
           onCerrarSesion={() => setDialogo("confirmarCerrarSesion")}
           panelSuperior={
             <>
@@ -168,14 +174,14 @@ export function Personas() {
         </main>
       </div>
 
-      <StatusBar contadorTexto={filtradas.length === personas.length ? `${personas.length} personas registradas` : `${filtradas.length} de ${personas.length} personas registradas`} mensajeEstado={mensajeEstado} usuario="Secretaría parroquial" />
+      <StatusBar contadorTexto={filtradas.length === personas.length ? `${personas.length} personas registradas` : `${filtradas.length} de ${personas.length} personas registradas`} mensajeEstado={mensajeEstado} usuario={usuario} />
 
       {dialogo === "formulario" && <PersonaFormDialog modo={modoFormulario} persona={actual} onCerrar={() => setDialogo(null)} onGuardar={guardar} nextId={nextId} />}
       {dialogo === "confirmarDesactivar" && (
         <ConfirmDialog titulo="Desactivar persona" mensaje="La persona no aparecerá en los registros activos del padrón. ¿Deseas continuar?" textoConfirmar="Desactivar" tono="alerta" onConfirmar={desactivar} onCancelar={() => setDialogo(null)} />
       )}
       {dialogo === "confirmarCerrarSesion" && (
-        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={() => navigate("/agenda")} onCancelar={() => setDialogo(null)} />
+        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={onCerrarSesion} onCancelar={() => setDialogo(null)} />
       )}
       {dialogo === "vistaPrevia" && (
         <PrintPreviewDialog

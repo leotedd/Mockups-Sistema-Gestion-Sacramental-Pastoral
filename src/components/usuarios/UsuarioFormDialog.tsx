@@ -36,7 +36,8 @@ export function UsuarioFormDialog({ modo, usuario, roles, onCerrar, onGuardar, n
     onGuardar({ id: usuario?.id ?? nextId(), usuario: nombreUsuario.trim(), nombre: nombre.trim(), descripcion, activo: usuario?.activo ?? true, roles: rolesSel });
   };
 
-  const titulo = modo === "nuevo" ? "Nuevo usuario" : modo === "editar" ? "Editar usuario" : "Ficha del usuario";
+  // Títulos alineados 1:1 con components/UsuarioFormDialog.tsx del desarrollo real.
+  const titulo = modo === "nuevo" ? "Registrar nuevo usuario" : modo === "editar" ? "Editar usuario" : "Detalle del usuario";
 
   return (
     <Modal

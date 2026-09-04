@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppShell } from "../context/AppShellContext";
 import { Eye, Pencil, RefreshCw, Search, ShieldCheck, UserCheck, UserCog, UserPlus, UserX } from "lucide-react";
 import { ROLES_SEED, USUARIOS_SEED, type Rol, type Usuario } from "../data/usuarios";
-import { Sidebar } from "../components/layout/Sidebar";
+import { Sidebar, type SidebarNavProps } from "../components/layout/Sidebar";
 import { StatusBar } from "../components/layout/StatusBar";
 import { Ribbon, type RibbonPestanaConfig } from "../components/layout/Ribbon";
 import { Chip } from "../components/ui/Chip";
@@ -13,9 +13,13 @@ import { UsuarioFormDialog } from "../components/usuarios/UsuarioFormDialog";
 type Dialogo = "formulario" | "confirmarEstado" | "confirmarCerrarSesion" | null;
 const POR_PAGINA = 10;
 
+interface Props extends SidebarNavProps {
+  onCerrarSesion: () => void;
+}
+
 /** Módulo Usuarios — reproduce pages/Usuarios.tsx del desarrollo real (visible solo para Administrador/Sacerdote/Párroco). */
-export function Usuarios() {
-  const navigate = useNavigate();
+export function Usuarios({ onCerrarSesion, ...nav }: Props) {
+  const { usuario, esAdmin } = useAppShell();
   const [usuarios, setUsuarios] = useState<Usuario[]>(USUARIOS_SEED);
   const [roles] = useState<Rol[]>(ROLES_SEED);
   const [seleccionadoId, setSeleccionadoId] = useState<string | null>(null);
@@ -83,7 +87,9 @@ export function Usuarios() {
 
       <div className="app-body">
         <Sidebar
+          {...nav}
           moduloActivo="usuarios"
+          esAdminOSacerdote={esAdmin}
           onCerrarSesion={() => setDialogo("confirmarCerrarSesion")}
           panelSuperior={
             <>
@@ -151,14 +157,14 @@ export function Usuarios() {
         </main>
       </div>
 
-      <StatusBar contadorTexto={`Total: ${filtrados.length} usuarios`} mensajeEstado={mensajeEstado} usuario="Secretaría parroquial" />
+      <StatusBar contadorTexto={`Total: ${filtrados.length} usuarios`} mensajeEstado={mensajeEstado} usuario={usuario} />
 
       {dialogo === "formulario" && <UsuarioFormDialog modo={modoFormulario} usuario={seleccionado} roles={roles} onCerrar={() => setDialogo(null)} onGuardar={guardar} nextId={nextId} />}
       {dialogo === "confirmarEstado" && (
         <ConfirmDialog titulo={seleccionado?.activo ? "Desactivar usuario" : "Activar usuario"} mensaje={seleccionado?.activo ? `¿Está seguro de desactivar a @${seleccionado?.usuario}? No podrá iniciar sesión en el sistema.` : `¿Desea activar a @${seleccionado?.usuario}?`} textoConfirmar={seleccionado?.activo ? "Sí, desactivar" : "Sí, activar"} tono={seleccionado?.activo ? "alerta" : "neutro"} onConfirmar={cambiarEstado} onCancelar={() => setDialogo(null)} />
       )}
       {dialogo === "confirmarCerrarSesion" && (
-        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={() => navigate("/agenda")} onCancelar={() => setDialogo(null)} />
+        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={onCerrarSesion} onCancelar={() => setDialogo(null)} />
       )}
     </div>
   );

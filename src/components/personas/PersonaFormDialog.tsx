@@ -26,13 +26,15 @@ export function PersonaFormDialog({ modo, persona, onCerrar, onGuardar, nextId }
   const [celular, setCelular] = useState(persona?.celular ?? "");
   const [direccion, setDireccion] = useState(persona?.direccion ?? "");
   const [localidad, setLocalidad] = useState(persona?.localidad ?? "Chiquimulilla");
-  const [errores, setErrores] = useState<{ nombres?: string; apellidos?: string; numeroDocumento?: string }>({});
+  const [errores, setErrores] = useState<{ nombres?: string; apellidos?: string; numeroDocumento?: string; fechaNacimiento?: string; direccion?: string }>({});
 
   const guardar = () => {
     const e: typeof errores = {};
     if (!nombres.trim()) e.nombres = "Ingrese los nombres.";
     if (!apellidos.trim()) e.apellidos = "Ingrese los apellidos.";
     if (!numeroDocumento.trim()) e.numeroDocumento = "Ingrese el número de documento.";
+    if (!fechaNacimiento.trim()) e.fechaNacimiento = "Ingrese la fecha de nacimiento.";
+    if (!direccion.trim()) e.direccion = "Ingrese la dirección.";
     setErrores(e);
     if (Object.keys(e).length > 0) return;
 
@@ -43,7 +45,8 @@ export function PersonaFormDialog({ modo, persona, onCerrar, onGuardar, nextId }
     });
   };
 
-  const titulo = modo === "nuevo" ? "Nueva persona" : modo === "editar" ? "Editar persona" : "Ficha de persona";
+  // Títulos alineados 1:1 con components/PersonaFormDialog.tsx del desarrollo real.
+  const titulo = modo === "nuevo" ? "Registrar nueva persona" : modo === "editar" ? "Editar persona" : "Detalle de la persona";
 
   return (
     <Modal
@@ -72,10 +75,10 @@ export function PersonaFormDialog({ modo, persona, onCerrar, onGuardar, nextId }
           {TIPOS_DOCUMENTO.map((t) => <option key={t} value={t}>{t}</option>)}
         </SelectField>
         <TextField label="N.° de documento" required disabled={soloLectura} value={numeroDocumento} error={errores.numeroDocumento} onChange={(e) => setNumeroDocumento(e.target.value)} />
-        <TextField label="Fecha de nacimiento" type="date" disabled={soloLectura} value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
+        <TextField label="Fecha de nacimiento" required type="date" disabled={soloLectura} value={fechaNacimiento} error={errores.fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
         <TextField label="Teléfono" disabled={soloLectura} value={telefono} onChange={(e) => setTelefono(e.target.value)} />
         <TextField label="Celular" disabled={soloLectura} value={celular} onChange={(e) => setCelular(e.target.value)} />
-        <TextField label="Dirección" disabled={soloLectura} className="col-span-2" value={direccion} onChange={(e) => setDireccion(e.target.value)} />
+        <TextField label="Dirección" required disabled={soloLectura} className="col-span-2" value={direccion} error={errores.direccion} onChange={(e) => setDireccion(e.target.value)} />
         <TextField label="Localidad" disabled={soloLectura} value={localidad} onChange={(e) => setLocalidad(e.target.value)} />
       </div>
     </Modal>

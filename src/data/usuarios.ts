@@ -23,11 +23,5 @@ export const ROLES_SEED: Rol[] = [
   { id: "rol-6", nombre: "Comité de Semana Santa" },
 ];
 
-export const USUARIOS_SEED: Usuario[] = [
-  { id: "usr-01", usuario: "admin", nombre: "Administrador del sistema", descripcion: "Cuenta técnica", activo: true, roles: ["Administrador"] },
-  { id: "usr-02", usuario: "secretaria", nombre: "Marta Lidia Solís", descripcion: "Secretaría parroquial", activo: true, roles: ["Secretaría"] },
-  { id: "usr-03", usuario: "sacerdote", nombre: "Pbro. Miguel Ángel Recinos", descripcion: "Párroco", activo: true, roles: ["Sacerdote", "Administrador"] },
-  { id: "usr-04", usuario: "catequista", nombre: "Rosa Emilia Chacón", descripcion: "Coordinadora de catequesis", activo: true, roles: ["Catequista"] },
-  { id: "usr-05", usuario: "vicario", nombre: "Pbro. José Roberto Colindres", descripcion: "Vicario parroquial", activo: true, roles: ["Sacerdote"] },
-  { id: "usr-06", usuario: "comite.ss", nombre: "Carlos Humberto Godoy", descripcion: "Comité de Semana Santa", activo: false, roles: ["Comité de Semana Santa"] },
-];
+/** Sin usuarios precargados: el mockup arranca vacío. Se registran localmente con "Nuevo". Los roles (ROLES_SEED) sí se conservan: son catálogo necesario para el formulario, no cuentas de usuario. */
+export const USUARIOS_SEED: Usuario[] = [];

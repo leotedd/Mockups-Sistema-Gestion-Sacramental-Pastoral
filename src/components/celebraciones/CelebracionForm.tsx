@@ -208,7 +208,7 @@ export function CelebracionForm({ celebracionInicial, variante, guardando, error
       </section>
 
       <section className="form-section">
-        <div className="form-section__head"><Users size={14} /> 2. CELEBRANTES</div>
+        <div className="form-section__head"><Users size={14} /> CELEBRANTES</div>
         <div className="form-section__body">
           <div className="section-toolbar">
             <span className="section-toolbar__hint">Se persisten en la celebración. El marcado como principal aparece en el listado.</span>
@@ -234,7 +234,7 @@ export function CelebracionForm({ celebracionInicial, variante, guardando, error
       </section>
 
       <section className="form-section">
-        <div className="form-section__head"><HandHeart size={14} /> 3. INTENCIONES</div>
+        <div className="form-section__head"><HandHeart size={14} /> INTENCIONES</div>
         <div className="form-section__body">
           <div className="filters" style={{ margin: "0 0 12px", background: "var(--marfil-2)" }}>
             <div className="filters__grid" style={{ gridTemplateColumns: "1fr 1fr" }}>

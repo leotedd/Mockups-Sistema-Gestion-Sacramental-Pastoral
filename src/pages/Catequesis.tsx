@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppShell } from "../context/AppShellContext";
 import { BookOpen, FilePlus2, FolderOpen, Pencil, RefreshCw, Trash2 } from "lucide-react";
 import { AULAS_SEED, CURSOS_SEED, TIPOS_CURSO, type Curso } from "../data/catequesis";
-import { Sidebar } from "../components/layout/Sidebar";
+import { Sidebar, type SidebarNavProps } from "../components/layout/Sidebar";
 import { StatusBar } from "../components/layout/StatusBar";
 import { Ribbon, type RibbonPestanaConfig } from "../components/layout/Ribbon";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
@@ -14,9 +14,13 @@ import { formatFecha } from "../utils/format";
 type Dialogo = "formulario" | "confirmarEliminar" | "confirmarCerrarSesion" | null;
 const POR_PAGINA = 10;
 
+interface Props extends SidebarNavProps {
+  onCerrarSesion: () => void;
+}
+
 /** Módulo Catequesis — construido desde cero (servicio preparado en el frontend real, sin pantalla propia todavía). */
-export function Catequesis() {
-  const navigate = useNavigate();
+export function Catequesis({ onCerrarSesion, ...nav }: Props) {
+  const { usuario, esAdmin } = useAppShell();
   const [cursos, setCursos] = useState<Curso[]>(CURSOS_SEED);
   const [seleccionadoId, setSeleccionadoId] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState("");
@@ -77,7 +81,9 @@ export function Catequesis() {
 
       <div className="app-body">
         <Sidebar
+          {...nav}
           moduloActivo="catequesis"
+          esAdminOSacerdote={esAdmin}
           onCerrarSesion={() => setDialogo("confirmarCerrarSesion")}
           panelSuperior={
             <>
@@ -138,14 +144,14 @@ export function Catequesis() {
         </main>
       </div>
 
-      <StatusBar contadorTexto={`${filtrados.length} de ${cursos.length} cursos`} mensajeEstado={mensajeEstado} usuario="Secretaría parroquial" />
+      <StatusBar contadorTexto={`${filtrados.length} de ${cursos.length} cursos`} mensajeEstado={mensajeEstado} usuario={usuario} />
 
       {dialogo === "formulario" && <CursoFormDialog modo={modoFormulario} curso={seleccionado} onCerrar={() => setDialogo(null)} onGuardar={guardar} nextId={nextId} />}
       {dialogo === "confirmarEliminar" && (
         <ConfirmDialog titulo="Eliminar curso" mensaje="Esta acción no se puede deshacer. ¿Deseas eliminar el curso seleccionado?" textoConfirmar="Eliminar" tono="alerta" onConfirmar={eliminar} onCancelar={() => setDialogo(null)} />
       )}
       {dialogo === "confirmarCerrarSesion" && (
-        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={() => navigate("/agenda")} onCancelar={() => setDialogo(null)} />
+        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={onCerrarSesion} onCancelar={() => setDialogo(null)} />
       )}
     </div>
   );

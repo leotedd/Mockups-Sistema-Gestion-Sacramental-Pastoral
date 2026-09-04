@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppShell } from "../context/AppShellContext";
 import { Church, FilePlus2, FolderOpen, Pencil, RefreshCw, Trash2 } from "lucide-react";
 import { REGISTROS_SEED, TIPOS_SACRAMENTO, type RegistroSacramental } from "../data/sacramental";
-import { Sidebar } from "../components/layout/Sidebar";
+import { Sidebar, type SidebarNavProps } from "../components/layout/Sidebar";
 import { StatusBar } from "../components/layout/StatusBar";
 import { Ribbon, type RibbonPestanaConfig } from "../components/layout/Ribbon";
 import { Chip } from "../components/ui/Chip";
@@ -15,9 +15,13 @@ import { formatFecha } from "../utils/format";
 type Dialogo = "formulario" | "confirmarEliminar" | "confirmarCerrarSesion" | null;
 const POR_PAGINA = 10;
 
+interface Props extends SidebarNavProps {
+  onCerrarSesion: () => void;
+}
+
 /** Módulo Sacramental — construido desde cero (solo existe el módulo de backend `modules/sacramentos`, sin pantalla propia todavía). */
-export function Sacramental() {
-  const navigate = useNavigate();
+export function Sacramental({ onCerrarSesion, ...nav }: Props) {
+  const { usuario, esAdmin } = useAppShell();
   const [registros, setRegistros] = useState<RegistroSacramental[]>(REGISTROS_SEED);
   const [seleccionadoId, setSeleccionadoId] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState("");
@@ -78,7 +82,9 @@ export function Sacramental() {
 
       <div className="app-body">
         <Sidebar
+          {...nav}
           moduloActivo="sacramental"
+          esAdminOSacerdote={esAdmin}
           onCerrarSesion={() => setDialogo("confirmarCerrarSesion")}
           panelSuperior={
             <>
@@ -140,14 +146,14 @@ export function Sacramental() {
         </main>
       </div>
 
-      <StatusBar contadorTexto={`${filtrados.length} de ${registros.length} registros`} mensajeEstado={mensajeEstado} usuario="Secretaría parroquial" />
+      <StatusBar contadorTexto={`${filtrados.length} de ${registros.length} registros`} mensajeEstado={mensajeEstado} usuario={usuario} />
 
       {dialogo === "formulario" && <RegistroFormDialog modo={modoFormulario} registro={seleccionado} onCerrar={() => setDialogo(null)} onGuardar={guardar} nextId={nextId} />}
       {dialogo === "confirmarEliminar" && (
         <ConfirmDialog titulo="Eliminar registro" mensaje="Esta acción no se puede deshacer. ¿Deseas eliminar el registro sacramental seleccionado?" textoConfirmar="Eliminar" tono="alerta" onConfirmar={eliminar} onCancelar={() => setDialogo(null)} />
       )}
       {dialogo === "confirmarCerrarSesion" && (
-        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={() => navigate("/agenda")} onCancelar={() => setDialogo(null)} />
+        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={onCerrarSesion} onCancelar={() => setDialogo(null)} />
       )}
     </div>
   );

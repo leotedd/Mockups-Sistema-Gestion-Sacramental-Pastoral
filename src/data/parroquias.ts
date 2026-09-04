@@ -24,9 +24,5 @@ export const OBISPADOS_SEED: Obispado[] = [
   { id: "ob-02", nombre: "Arquidiócesis de Guatemala", obispo: "Mons. Vacante", activo: true },
 ];
 
-export const PARROQUIAS_SEED: Parroquia[] = [
-  { id: "par-01", nombre: "Parroquia Santa Cruz", parroco: "Pbro. Miguel Ángel Recinos", municipio: "Chiquimulilla", direccion: "3a. calle 2-10 zona 1", telefono: "7845-0001", horarioAtencion: "Lun–Vie 08:00–17:00", idObispado: "ob-01", activo: true },
-  { id: "par-02", nombre: "Parroquia San José", parroco: "Pbro. José Roberto Colindres", municipio: "Chiquimulilla", direccion: "Barrio San José", telefono: "7845-0022", horarioAtencion: "Lun–Vie 08:00–16:00", idObispado: "ob-01", activo: true },
-  { id: "par-03", nombre: "Parroquia Nuestra Señora del Rosario", parroco: "Pbro. Fernando Estuardo Ríos", municipio: "Taxisco", direccion: "Centro, Taxisco", telefono: "7845-0044", horarioAtencion: "Mar–Sáb 09:00–17:00", idObispado: "ob-01", activo: true },
-  { id: "par-04", nombre: "Parroquia San Miguel Arcángel", parroco: "Pbro. Carlos Humberto Marroquín", municipio: "Guazacapán", direccion: "Centro, Guazacapán", telefono: "7845-0066", horarioAtencion: "Lun–Vie 08:00–16:00", idObispado: "ob-01", activo: false },
-];
+/** Sin sedes precargadas: el mockup arranca vacío. Se registran localmente con "Nueva". Las diócesis (OBISPADOS_SEED) sí se conservan: son catálogo necesario para el formulario, no registros de sedes. */
+export const PARROQUIAS_SEED: Parroquia[] = [];

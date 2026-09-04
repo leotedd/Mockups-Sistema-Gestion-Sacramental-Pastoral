@@ -23,15 +23,14 @@ export function CitaFormDialog({ cita, fechaSugerida, guardando, onGuardar, onCa
   const [horaDesde, setHoraDesde] = useState((cita?.inicio ?? "").slice(11, 16) || "08:00");
   const [horaHasta, setHoraHasta] = useState((cita?.fin ?? "").slice(11, 16) || "09:00");
   const [prioridad, setPrioridad] = useState<Prioridad>(cita?.prioridad ?? "Media");
-  const [recordatorio, setRecordatorio] = useState<Recordatorio>(cita?.recordatorio ?? "1 hora");
+  const [recordatorio, setRecordatorio] = useState<Recordatorio>(cita?.recordatorio ?? "15 min");
   const [observaciones, setObservaciones] = useState(cita?.observaciones ?? "");
-  const [errores, setErrores] = useState<{ asunto?: string; lugar?: string; fecha?: string }>({});
+  const [errores, setErrores] = useState<{ asunto?: string }>({});
 
+  // Único campo obligatorio en components/AppointmentDialog.tsx del desarrollo real: el asunto.
   const guardar = () => {
     const e: typeof errores = {};
     if (!asunto.trim()) e.asunto = "Indique el asunto de la cita.";
-    if (!lugar.trim()) e.lugar = "Indique el lugar.";
-    if (!fecha) e.fecha = "Indique la fecha.";
     setErrores(e);
     if (Object.keys(e).length > 0) return;
 
@@ -64,8 +63,8 @@ export function CitaFormDialog({ cita, fechaSugerida, guardando, onGuardar, onCa
     >
       <div className="form-grid">
         <TextField label="Asunto" required className="col-span-3" value={asunto} error={errores.asunto} onChange={(e) => setAsunto(e.target.value)} />
-        <TextField label="Lugar" required className="col-span-2" value={lugar} error={errores.lugar} onChange={(e) => setLugar(e.target.value)} />
-        <TextField label="Fecha" required type="date" value={fecha} error={errores.fecha} onChange={(e) => setFecha(e.target.value)} />
+        <TextField label="Lugar" className="col-span-2" value={lugar} onChange={(e) => setLugar(e.target.value)} />
+        <TextField label="Fecha" type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} />
         <TextField label="Hora desde" type="time" value={horaDesde} onChange={(e) => setHoraDesde(e.target.value)} />
         <TextField label="Hora hasta" type="time" value={horaHasta} onChange={(e) => setHoraHasta(e.target.value)} />
         <SelectField label="Prioridad" value={prioridad} onChange={(e) => setPrioridad(e.target.value as Prioridad)}>

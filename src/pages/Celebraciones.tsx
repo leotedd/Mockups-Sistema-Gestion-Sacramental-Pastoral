@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { CELEBRACIONES_SEED } from "../data/mockCelebraciones";
 import { ESTADOS } from "../data/catalogos";
 import type { Celebracion, CelebracionFiltro, ModoCelebraciones, VistaCalendarioCelebraciones, VistaCelebraciones, EstadoCelebracion, Celebrante } from "../data/types";
 import { parseISO } from "../utils/format";
-import { FECHA_SIMULADA } from "../context/AppShellContext";
-import { Sidebar } from "../components/layout/Sidebar";
+import { FECHA_SIMULADA, useAppShell } from "../context/AppShellContext";
+import { Sidebar, type SidebarNavProps } from "../components/layout/Sidebar";
 import { CelebracionesStatusBar } from "../components/celebraciones/CelebracionesStatusBar";
 import { Banner } from "../components/ui/Banner";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
@@ -44,8 +43,12 @@ const AVISO_FASE_POSTERIOR = "Esta acción forma parte de una etapa posterior de
  * la impresión y el registro rapido de intenciones desde el Ribbon siguen
  * pendientes en el sistema real, asi que aqui se muestran como tales.
  */
-export function Celebraciones() {
-  const navigate = useNavigate();
+interface Props extends SidebarNavProps {
+  onCerrarSesion: () => void;
+}
+
+export function Celebraciones({ onCerrarSesion, ...nav }: Props) {
+  const { usuario, esAdmin } = useAppShell();
   const [celebraciones, setCelebraciones] = useState<Celebracion[]>(CELEBRACIONES_SEED);
 
   const [modo, setModo] = useState<ModoCelebraciones>("listado");
@@ -201,7 +204,7 @@ export function Celebraciones() {
       />
 
       <div className="app-body">
-        <Sidebar moduloActivo="celebraciones" panelSuperior={panelSuperior} onCerrarSesion={() => setConfirmarSalir(true)} />
+        <Sidebar {...nav} moduloActivo="celebraciones" esAdminOSacerdote={esAdmin} panelSuperior={panelSuperior} onCerrarSesion={() => setConfirmarSalir(true)} />
 
         <main className="main" style={{ padding: edicionVisible || detalleVisible ? 0 : undefined }}>
           {edicionVisible ? (
@@ -263,7 +266,7 @@ export function Celebraciones() {
         </main>
       </div>
 
-      <CelebracionesStatusBar totalCelebraciones={celebraciones.length} resultadosVisibles={celebracionesFiltradas.length} mensajeEstado={mensajeEstado} usuario="Secretaría parroquial" />
+      <CelebracionesStatusBar totalCelebraciones={celebraciones.length} resultadosVisibles={celebracionesFiltradas.length} mensajeEstado={mensajeEstado} usuario={usuario} />
 
       {dialogoNuevo && <CelebracionForm variante="modal" nextId={nextId} onGuardar={handleGuardarNuevo} onCancelar={() => setDialogoNuevo(false)} />}
 
@@ -282,7 +285,7 @@ export function Celebraciones() {
           textoConfirmar="Cerrar sesión"
           tono="neutro"
           onCancelar={() => setConfirmarSalir(false)}
-          onConfirmar={() => { setConfirmarSalir(false); navigate("/agenda"); }}
+          onConfirmar={() => { setConfirmarSalir(false); onCerrarSesion(); }}
         />
       )}
     </div>

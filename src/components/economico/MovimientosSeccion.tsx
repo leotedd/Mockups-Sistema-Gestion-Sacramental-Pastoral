@@ -22,7 +22,7 @@ export function MovimientosSeccion({ onMensaje }: { onMensaje: (m: string) => vo
   const [modo, setModo] = useState<"nuevo" | "ver" | "editar">("nuevo");
   const [exito, setExito] = useState<string | null>(null);
   const nextIdRef = useRef(900);
-  const numeroRef = useRef(1045);
+  const numeroRef = useRef(0);
 
   const seleccionado = useMemo(() => movimientos.find((m) => m.id === seleccionadoId) ?? null, [movimientos, seleccionadoId]);
   const filtrados = useMemo(() => (filtroTipo === "Todos" ? movimientos : movimientos.filter((m) => m.tipo === filtroTipo)).sort((a, b) => b.fecha.localeCompare(a.fecha)), [movimientos, filtroTipo]);

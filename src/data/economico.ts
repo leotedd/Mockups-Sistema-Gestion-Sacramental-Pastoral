@@ -100,48 +100,8 @@ function totalDebe(m: DetalleMovimiento[]) { return m.reduce((s, d) => s + d.deb
 function totalHaber(m: DetalleMovimiento[]) { return m.reduce((s, d) => s + d.haber, 0); }
 export { totalDebe, totalHaber };
 
-export const MOVIMIENTOS_SEED: MovimientoRegistro[] = [
-  {
-    id: "mov-01", numeroRegistro: 1042, fecha: "2026-09-06", origenId: "om-01", origen: "Colecta dominical", tipo: "Ingreso",
-    descripcion: "Colecta misas dominicales 06/09", destinatario: "Parroquia Santa Cruz", periodoAnio: 2026, periodoMes: 9, cerrado: false,
-    detalle: [
-      { id: "d-01", subcuentaId: "sub-1", subcuenta: "Caja chica secretaría", debe: 1850, haber: 0, formaPago: "Efectivo" },
-      { id: "d-02", subcuentaId: "sub-3", subcuenta: "Colecta 1ª misa dominical", debe: 0, haber: 1850, formaPago: "Efectivo" },
-    ],
-  },
-  {
-    id: "mov-02", numeroRegistro: 1043, fecha: "2026-09-06", origenId: "om-02", origen: "Estipendio de intenciones", tipo: "Ingreso",
-    descripcion: "Estipendios de intenciones de la semana", destinatario: "Familia Godoy / Familia Recinos", periodoAnio: 2026, periodoMes: 9, cerrado: false,
-    detalle: [
-      { id: "d-03", subcuentaId: "sub-1", subcuenta: "Caja chica secretaría", debe: 300, haber: 0, formaPago: "Efectivo" },
-      { id: "d-04", subcuentaId: "sub-6", subcuenta: "Intenciones de misa", debe: 0, haber: 300, formaPago: "Efectivo" },
-    ],
-  },
-  {
-    id: "mov-03", numeroRegistro: 1044, fecha: "2026-09-08", origenId: "om-05", origen: "Pago de servicios (luz, agua)", tipo: "Egreso",
-    descripcion: "Pago factura de energía eléctrica agosto", destinatario: "Empresa Eléctrica Municipal", periodoAnio: 2026, periodoMes: 9, cerrado: false,
-    detalle: [
-      { id: "d-05", subcuentaId: "sub-7", subcuenta: "Energía eléctrica", debe: 640, haber: 0, formaPago: "Transferencia bancaria" },
-      { id: "d-06", subcuentaId: "sub-2", subcuenta: "Banco Industrial - cta. 123-456", debe: 0, haber: 640, formaPago: "Transferencia bancaria" },
-    ],
-  },
-  {
-    id: "mov-04", numeroRegistro: 1045, fecha: "2026-09-19", origenId: "om-07", origen: "Estipendio a celebrante", tipo: "Egreso",
-    descripcion: "Estipendio matrimonio 19/09", destinatario: "Pbro. Miguel Ángel Recinos", periodoAnio: 2026, periodoMes: 9, cerrado: false,
-    detalle: [
-      { id: "d-07", subcuentaId: "sub-9", subcuenta: "Estipendio sacerdote celebrante", debe: 250, haber: 0, formaPago: "Efectivo" },
-      { id: "d-08", subcuentaId: "sub-1", subcuenta: "Caja chica secretaría", debe: 0, haber: 250, formaPago: "Efectivo" },
-    ],
-  },
-  {
-    id: "mov-05", numeroRegistro: 1041, fecha: "2026-08-30", origenId: "om-01", origen: "Colecta dominical", tipo: "Ingreso",
-    descripcion: "Colecta misas dominicales 30/08", destinatario: "Parroquia Santa Cruz", periodoAnio: 2026, periodoMes: 8, cerrado: true,
-    detalle: [
-      { id: "d-09", subcuentaId: "sub-1", subcuenta: "Caja chica secretaría", debe: 1620, haber: 0, formaPago: "Efectivo" },
-      { id: "d-10", subcuentaId: "sub-3", subcuenta: "Colecta 1ª misa dominical", debe: 0, haber: 1620, formaPago: "Efectivo" },
-    ],
-  },
-];
+/** Sin movimientos precargados: el mockup arranca vacío. Se registran localmente con "Nuevo movimiento". El catálogo de cuentas (Rubro/Grupo/Cuenta/Subcuenta) y los orígenes de movimiento sí se conservan: son catálogo necesario para el formulario, no registros de transacciones. */
+export const MOVIMIENTOS_SEED: MovimientoRegistro[] = [];
 
 export interface Proveedor {
   id: string;
@@ -153,11 +113,8 @@ export interface Proveedor {
   contacto: string;
 }
 
-export const PROVEEDORES_SEED: Proveedor[] = [
-  { id: "prov-01", descripcion: "Empresa Eléctrica Municipal", direccion: "Zona 1, Chiquimulilla", localidad: "Chiquimulilla", telefono: "7845-9001", email: "cobros@eem.gt", contacto: "Depto. de cobros" },
-  { id: "prov-02", descripcion: "Ferretería San Isidro", direccion: "4a. calle 1-12 zona 1", localidad: "Chiquimulilla", telefono: "7845-3320", email: "", contacto: "Don Isidro Pérez" },
-  { id: "prov-03", descripcion: "Imprenta Litografía Central", direccion: "2a. avenida 3-45 zona 1", localidad: "Chiquimulilla", telefono: "7845-7712", email: "pedidos@litocentral.com", contacto: "Sucely Ramos" },
-];
+/** Sin proveedores precargados: el mockup arranca vacío. Se registran localmente con "Nuevo proveedor". */
+export const PROVEEDORES_SEED: Proveedor[] = [];
 
 export interface Vencimiento {
   id: string;
@@ -169,9 +126,5 @@ export interface Vencimiento {
   cancelado: boolean;
 }
 
-export const VENCIMIENTOS_SEED: Vencimiento[] = [
-  { id: "ven-01", concepto: "Pago agua potable - septiembre", fechaIngreso: "2026-09-01", fechaVencimiento: "2026-09-15", importe: 180, esDebito: true, cancelado: false },
-  { id: "ven-02", concepto: "Cuota diocesana anual", fechaIngreso: "2026-08-01", fechaVencimiento: "2026-09-30", importe: 3200, esDebito: true, cancelado: false },
-  { id: "ven-03", concepto: "Donativo pendiente de cobro - Familia Recinos", fechaIngreso: "2026-08-20", fechaVencimiento: "2026-09-10", importe: 500, esDebito: false, cancelado: true },
-  { id: "ven-04", concepto: "Pago factura imprenta (boletines)", fechaIngreso: "2026-09-03", fechaVencimiento: "2026-09-20", importe: 420, esDebito: true, cancelado: false },
-];
+/** Sin vencimientos precargados: el mockup arranca vacío. Se registran localmente con "Nuevo vencimiento". */
+export const VENCIMIENTOS_SEED: Vencimiento[] = [];

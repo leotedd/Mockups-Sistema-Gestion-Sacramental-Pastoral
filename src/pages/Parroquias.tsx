@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppShell } from "../context/AppShellContext";
 import { Church, Eye, Pencil, Plus, RefreshCw, Search, ToggleLeft, ToggleRight } from "lucide-react";
 import { OBISPADOS_SEED, PARROQUIAS_SEED, type Obispado, type Parroquia } from "../data/parroquias";
-import { Sidebar } from "../components/layout/Sidebar";
+import { Sidebar, type SidebarNavProps } from "../components/layout/Sidebar";
 import { StatusBar } from "../components/layout/StatusBar";
 import { Ribbon, type RibbonPestanaConfig } from "../components/layout/Ribbon";
 import { Chip } from "../components/ui/Chip";
@@ -13,9 +13,13 @@ import { ParroquiaFormDialog } from "../components/parroquias/ParroquiaFormDialo
 type Dialogo = "formulario" | "confirmarEstado" | "confirmarCerrarSesion" | null;
 const POR_PAGINA = 10;
 
+interface Props extends SidebarNavProps {
+  onCerrarSesion: () => void;
+}
+
 /** Módulo Parroquias — reproduce pages/Parroquias.tsx del desarrollo real (visible solo para Administrador/Sacerdote/Párroco). */
-export function Parroquias() {
-  const navigate = useNavigate();
+export function Parroquias({ onCerrarSesion, ...nav }: Props) {
+  const { usuario, esAdmin } = useAppShell();
   const [parroquias, setParroquias] = useState<Parroquia[]>(PARROQUIAS_SEED);
   const [obispados] = useState<Obispado[]>(OBISPADOS_SEED);
   const [seleccionadaId, setSeleccionadaId] = useState<string | null>(null);
@@ -84,7 +88,9 @@ export function Parroquias() {
 
       <div className="app-body">
         <Sidebar
+          {...nav}
           moduloActivo="parroquias"
+          esAdminOSacerdote={esAdmin}
           onCerrarSesion={() => setDialogo("confirmarCerrarSesion")}
           panelSuperior={
             <>
@@ -154,14 +160,14 @@ export function Parroquias() {
         </main>
       </div>
 
-      <StatusBar contadorTexto={`Total: ${filtradas.length} parroquias`} mensajeEstado={mensajeEstado} usuario="Secretaría parroquial" />
+      <StatusBar contadorTexto={`Total: ${filtradas.length} parroquias`} mensajeEstado={mensajeEstado} usuario={usuario} />
 
       {dialogo === "formulario" && <ParroquiaFormDialog modo={modoFormulario} parroquia={seleccionada} obispados={obispados} onCerrar={() => setDialogo(null)} onGuardar={guardar} nextId={nextId} />}
       {dialogo === "confirmarEstado" && (
         <ConfirmDialog titulo={seleccionada?.activo ? "Inactivar parroquia" : "Activar parroquia"} mensaje={seleccionada?.activo ? `¿Está seguro de inactivar "${seleccionada?.nombre}"?` : `¿Desea activar "${seleccionada?.nombre}"?`} textoConfirmar={seleccionada?.activo ? "Sí, inactivar" : "Sí, activar"} tono={seleccionada?.activo ? "alerta" : "neutro"} onConfirmar={cambiarEstado} onCancelar={() => setDialogo(null)} />
       )}
       {dialogo === "confirmarCerrarSesion" && (
-        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={() => navigate("/agenda")} onCancelar={() => setDialogo(null)} />
+        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={onCerrarSesion} onCancelar={() => setDialogo(null)} />
       )}
     </div>
   );

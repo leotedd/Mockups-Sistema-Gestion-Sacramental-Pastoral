@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppShell } from "../context/AppShellContext";
 import { FilePlus2, FolderOpen, Home, Pencil, RefreshCw, Trash2 } from "lucide-react";
 import { FAMILIAS_SEED, TIPOS_UNION, type Familia } from "../data/familias";
-import { Sidebar } from "../components/layout/Sidebar";
+import { Sidebar, type SidebarNavProps } from "../components/layout/Sidebar";
 import { StatusBar } from "../components/layout/StatusBar";
 import { Ribbon, type RibbonPestanaConfig } from "../components/layout/Ribbon";
 import { Chip } from "../components/ui/Chip";
@@ -21,8 +21,12 @@ const POR_PAGINA = 10;
  * (ribbon genérico, sidebar, dialogos), sin inventar procesos: los campos
  * provienen del DTO y del modelo `familia` del backend.
  */
-export function Familias() {
-  const navigate = useNavigate();
+interface Props extends SidebarNavProps {
+  onCerrarSesion: () => void;
+}
+
+export function Familias({ onCerrarSesion, ...nav }: Props) {
+  const { usuario, esAdmin } = useAppShell();
   const [familias, setFamilias] = useState<Familia[]>(FAMILIAS_SEED);
   const [seleccionadaId, setSeleccionadaId] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState("");
@@ -83,7 +87,9 @@ export function Familias() {
 
       <div className="app-body">
         <Sidebar
+          {...nav}
           moduloActivo="familias"
+          esAdminOSacerdote={esAdmin}
           onCerrarSesion={() => setDialogo("confirmarCerrarSesion")}
           panelSuperior={
             <>
@@ -147,14 +153,14 @@ export function Familias() {
         </main>
       </div>
 
-      <StatusBar contadorTexto={`${filtradas.length} de ${familias.length} familias`} mensajeEstado={mensajeEstado} usuario="Secretaría parroquial" />
+      <StatusBar contadorTexto={`${filtradas.length} de ${familias.length} familias`} mensajeEstado={mensajeEstado} usuario={usuario} />
 
       {dialogo === "formulario" && <FamiliaFormDialog modo={modoFormulario} familia={seleccionada} onCerrar={() => setDialogo(null)} onGuardar={guardar} nextId={nextId} />}
       {dialogo === "confirmarEliminar" && (
         <ConfirmDialog titulo="Eliminar familia" mensaje="Esta acción no se puede deshacer. ¿Deseas eliminar el grupo familiar seleccionado?" textoConfirmar="Eliminar" tono="alerta" onConfirmar={eliminar} onCancelar={() => setDialogo(null)} />
       )}
       {dialogo === "confirmarCerrarSesion" && (
-        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={() => navigate("/agenda")} onCancelar={() => setDialogo(null)} />
+        <ConfirmDialog titulo="Cerrar sesión" mensaje="¿Deseas cerrar la sesión actual?" textoConfirmar="Cerrar sesión" tono="neutro" onConfirmar={onCerrarSesion} onCancelar={() => setDialogo(null)} />
       )}
     </div>
   );

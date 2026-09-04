@@ -1701,6 +1701,198 @@ table.print-grid td {
   cursor: pointer;
 }
 
+/* ---------- LOGIN ---------- */
+.login-screen {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+.login-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: 460px;
+  background: var(--borgona-800);
+  padding: 48px 40px;
+  flex-shrink: 0;
+}
+.login-panel__inner {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dorado);
+}
+.login-brand span {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+.login-title {
+  margin: 10px 0 4px;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--texto-inv);
+  letter-spacing: -0.3px;
+}
+.login-sub {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dorado-suave);
+}
+.login-divider {
+  border-top: 1px solid var(--borgona-700);
+  margin: 24px 0 18px;
+}
+.login-form-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--texto-inv);
+}
+.login-form-hint {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--dorado-suave);
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+.login-field label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--texto-inv);
+  margin-bottom: 6px;
+}
+.login-input {
+  width: 100%;
+  border: 1px solid var(--borgona-600);
+  background: var(--borgona-700);
+  color: var(--texto-inv);
+  border-radius: var(--radio);
+  padding: 9px 12px;
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.login-input::placeholder {
+  color: rgba(251, 246, 236, 0.45);
+}
+.login-input:focus {
+  border-color: var(--dorado);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.35);
+}
+.login-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.login-error {
+  margin: 0;
+  border: 1px solid var(--dorado-borde);
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--dorado-suave);
+  border-radius: var(--radio);
+  padding: 9px 12px;
+  font-size: 12.5px;
+}
+.login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--blanco);
+  background: var(--marfil);
+  color: var(--borgona-800);
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: var(--radio);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.login-btn:hover:not(:disabled) {
+  background: var(--dorado-suave);
+}
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.login-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 20px;
+  padding: 9px 11px;
+  border-radius: var(--radio);
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px dashed var(--dorado-borde);
+  color: var(--dorado-suave);
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+.login-hint strong {
+  color: var(--dorado);
+}
+.login-footer {
+  margin-top: 18px;
+  font-size: 12px;
+  color: rgba(251, 246, 236, 0.55);
+}
+.login-side {
+  flex: 1;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--marfil);
+}
+/* Insignia circular de 3 capas, igual que pages/Login.tsx del proyecto
+   principal: marco blanco con sombra borgoña -> anillo conico dorado ->
+   contenido circular con borde blanco (ahi el real muestra la fotografia
+   de la parroquia; este mockup no la reutiliza, ver Login.tsx). */
+.login-badge__frame {
+  border-radius: 50%;
+  padding: 6px;
+  background: var(--blanco);
+  box-shadow: 0 20px 40px rgba(92, 6, 27, 0.22);
+}
+.login-badge__ring {
+  border-radius: 50%;
+  padding: 12px;
+  background: conic-gradient(from 180deg, #c9971f, #f3dfa2, #b8860b, #f7e7b4, #c9971f, #f3dfa2, #c9971f);
+}
+.login-badge__photo {
+  display: block;
+  width: 288px;
+  height: 288px;
+  border-radius: 50%;
+  border: 4px solid var(--blanco);
+  object-fit: cover;
+}
+@media (min-width: 1200px) {
+  .login-badge__photo {
+    width: 384px;
+    height: 384px;
+  }
+}
+@media (min-width: 900px) {
+  .login-side {
+    display: flex;
+  }
+}
+
 /* ---------- RESPONSIVE (prioridad desktop) ---------- */
 @media (max-width: 1440px) {
   .form-grid {
