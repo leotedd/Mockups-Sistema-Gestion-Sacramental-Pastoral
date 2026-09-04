@@ -1,0 +1,97 @@
+/* ==========================================================================
+   TEMA INSTITUCIONAL - Parroquia Santa Cruz, Chiquimulilla
+   Estetica: aplicacion administrativa de escritorio (tipo Microsoft Office)
+   ========================================================================== */
+
+:root {
+  /* Paleta principal */
+  --borgona: #5c061b;
+  --borgona-800: #4a0516;
+  --borgona-700: #6d0a22;
+  --borgona-600: #7d1a30;
+  --borgona-100: #f3e3e7;
+  --borgona-50: #faf1f3;
+
+  --dorado: #d4af37;
+  --dorado-claro: #ecd7a3;
+  --dorado-suave: #f6eccf;
+  --dorado-borde: #c9a94a;
+
+  --marfil: #faf7f0;
+  --marfil-2: #f4efe3;
+  --blanco: #ffffff;
+
+  --texto: #1e1c1a;
+  --texto-2: #4a4642;
+  --texto-3: #6f6a64;
+  --texto-inv: #fbf6ec;
+
+  --linea: #d9d2c4;
+  --linea-suave: #e7e1d4;
+  --linea-fuerte: #c3bba8;
+
+  /* Estados */
+  --ok: #2f6b3a;
+  --ok-bg: #e8f2e6;
+  --peligro: #a3202b;
+  --peligro-700: #86171f;
+  --peligro-bg: #f7e5e5;
+  --aviso: #8a6d1a;
+  --aviso-bg: #f6eecd;
+  --info: #4a4642;
+  --info-bg: #eef0f2;
+
+  /* Tipografia */
+  --fuente: "Segoe UI", "Franklin Gothic Medium", Tahoma, Geneva, Verdana, sans-serif;
+  --fuente-serif: "Cambria", "Georgia", "Times New Roman", serif;
+
+  /* Medidas */
+  --alto-statusbar: 24px;
+  --ancho-sidebar: 214px;
+  --radio: 3px;
+  --sombra-modal: 0 12px 40px rgba(30, 20, 10, 0.35);
+  --sombra-panel: 0 1px 3px rgba(30, 20, 10, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--fuente);
+  font-size: 13px;
+  color: var(--texto);
+  background: var(--marfil-2);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: var(--borgona-700);
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+::-webkit-scrollbar-track {
+  background: var(--marfil-2);
+}
+::-webkit-scrollbar-thumb {
+  background: #cfc7b4;
+  border: 3px solid var(--marfil-2);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b9af98;
+}
